@@ -72,68 +72,15 @@ public:
         display();
         cout<<"Choose a Cell to play : ";
         cin>>cell;
-        switch(cell)
+        if(cell>='1'&&cell<='9')
         {
-        case '1':
-        {
-            r=0;
-            c=0;
-            break;
+            r=(cell-'1')/3;
+            c=(cell-'1')%3;
         }
-        case '2':
-        {
-            r=0;
-            c=1;
-            break;
-        }
-        case '3':
-        {
-            r=0;
-            c=2;
-            break;
-        }
-        case '4':
-        {
-            r=1;
-            c=0;
-            break;
-        }
-        case '5':
-        {
-            r=1;
-            c=1;
-            break;
-        }
-        case '6':
-        {
-            r=1;
-            c=2;
-            break;
-        }
-        case '7':
-        {
-            r=2;
-            c=0;
-            break;
-        }
-        case '8':
-        {
-            r=2;
-            c=1;
-            break;
-        }
-        case '9':
-        {
-            r=2;
-            c=2;
-            break;
-        }
-        default:
+        else
         {
             cout<<"Please choose a correct cell from 1 to 9\n";
             check_cell();
-            break;
-        }
         }
     }
 
@@ -168,10 +115,10 @@ public:
         int i,j;
         system("cls");
         cout<<"\n";
-        for(i=0;i<3;i++)
+        for(i=0; i<3; i++)
         {
             cout<<"\t";
-            for(j=0;j<3;j++)
+            for(j=0; j<3; j++)
             {
                 if(xo[i][j]=='X')textcolor(1);
                 else if(xo[i][j]=='O')textcolor(4);
@@ -240,8 +187,7 @@ public:
             case 'E':
             {
                 display();
-                cout<<"Computer Choose cell";
-                cout<<" : ";
+                cout<<"Computer Choose cell : ";
                 cout<<cpu_cell<<endl;
                 Sleep(1900);
                 xo[r][c]='O';
@@ -270,7 +216,7 @@ public:
     }
 private:
     char cell;
-    char xo[3][3]= {{'1','2','3'},{'4','5','6'},{'7','8','9'}},a='X',option,vs,d,Mode=' ';
+    char xo[3][3]= {{'1','2','3'},{'4','5','6'},{'7','8','9'}},a='X',option,vs,Mode=' ';
     int winner=0,turn=1,r=0,c=0,x=0,o=0,score=0;
     int cpu_cell=0;
     void exit()
@@ -289,68 +235,9 @@ private:
         if(turn==1)play();
         else
         {
-            cpu_cell=rand()%10;
-            switch(cpu_cell)
-            {
-            case 1:
-            {
-                r=0;
-                c=0;
-                break;
-            }
-            case 2:
-            {
-                r=0;
-                c=1;
-                break;
-            }
-            case 3:
-            {
-                r=0;
-                c=2;
-                break;
-            }
-            case 4:
-            {
-                r=1;
-                c=0;
-                break;
-            }
-            case 5:
-            {
-                r=1;
-                c=1;
-                break;
-            }
-            case 6:
-            {
-                r=1;
-                c=2;
-                break;
-            }
-            case 7:
-            {
-                r=2;
-                c=0;
-                break;
-            }
-            case 8:
-            {
-                r=2;
-                c=1;
-                break;
-            }
-            case 9:
-            {
-                r=2;
-                c=2;
-                break;
-            }
-            default:
-            {
-                easy_mode();
-            }
-            }
+            cpu_cell=rand()%9+1;
+            r=(cpu_cell-1)/3;
+            c=(cpu_cell-1)%3;
             check_filled();
         }
     }
@@ -359,6 +246,7 @@ private:
         system("cls");
         cout<<"\tGame Difficulity Mode\n\n\tHard : H\tEasy : E\n";
         cout<<"\n\nChoose Mode : ";
+        char d;
         cin>>d;
         switch(d)
         {
@@ -378,11 +266,6 @@ private:
         }
         }
 
-    }
-
-    void lock_cell()
-    {
-        /**TODO**/
     }
 
     void vs_cpu()
@@ -414,7 +297,7 @@ private:
                 }
                 }
             }
-            if(winner==0) display();
+            if(!winner) display();
         }
         else hard_mode();
     }
@@ -437,39 +320,43 @@ private:
 
     void check_winner()
     {
-        int i;
-        for(i=0;i<3;i++)
+        auto win=[](char c,char &a,int &winner)
+        {
+            switch(c)
+            {
+            case 'X':
+                a='X';
+                winner=1;
+                break;
+            case 'O':
+                a='O';
+                winner=2;
+                break;
+            }
+        };
+
+        for(int i=0; i<3; i++)
         {
             if((xo[i][0]==xo[i][1]&&xo[i][0]==xo[i][2])||(xo[0][i]==xo[1][i]&&xo[0][i]==xo[2][i]))
             {
-                switch(xo[i][i])
-                {
-                case 'X':
-                    a='X';
-                    winner=1;
-                    break;
-                case 'O':
-                    a='O';
-                    winner=2;
-                    break;
-                }
-            }
-            if(winner==1||winner==2)
-            {
-                display_winner();
+                win(xo[i][i],a,winner);
                 break;
             }
         }
+        if((xo[0][0]==xo[1][1]&&xo[0][0]==xo[2][2])||(xo[0][2]==xo[1][1]&&xo[0][2]==xo[2][0]))
+                win(xo[1][1],a,winner);
+        if(winner)
+            display_winner();
     }
     void display_equality()
     {
         int i,j;
         system("cls");
         cout<<"\n";
-        for(i=0;i<3;i++)
+        for(i=0; i<3; i++)
         {
             cout<<"\t";
-            for(j=0;j<3;j++)
+            for(j=0; j<3; j++)
             {
                 if(xo[i][j]=='X')textcolor(1);
                 else if(xo[i][j]=='O')textcolor(4);
@@ -486,10 +373,10 @@ private:
         int i,j;
         system("cls");
         cout<<"\n";
-        for(i=0;i<3;i++)
+        for(i=0; i<3; i++)
         {
             cout<<"\t";
-            for(j=0;j<3;j++)
+            for(j=0; j<3; j++)
             {
                 if(xo[i][j]=='X')textcolor(1);
                 else if(xo[i][j]=='O')textcolor(4);
@@ -503,11 +390,13 @@ private:
         {
             (winner==1)?cout<<"You win !":cout<<"Computer win !" ;
         }
-        else {cout<<"Player "<<winner<<" ( ";
-                textcolor(winner==1?winner:winner*2);
-                cout<<a;
-                textcolor(7);
-                cout<<" -Player)"<<" win\n";
+        else
+        {
+            cout<<"Player "<<winner<<" ( ";
+            textcolor(winner==1?winner:winner*2);
+            cout<<a;
+            textcolor(7);
+            cout<<" -Player)"<<" win\n";
         }
 
     }
