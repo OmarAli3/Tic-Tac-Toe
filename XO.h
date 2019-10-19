@@ -388,7 +388,7 @@ private:
         textcolor(7);
         if(Mode=='E')
         {
-            (winner==1)?cout<<"You win !":cout<<"Computer win !" ;
+            (winner==1)?cout<<"You win !":cout<<"Computer wins !" ;
         }
         else
         {
@@ -396,7 +396,7 @@ private:
             textcolor(winner==1?winner:winner*2);
             cout<<a;
             textcolor(7);
-            cout<<" -Player)"<<" win\n";
+            cout<<" -Player)"<<" wins\n";
         }
 
     }
